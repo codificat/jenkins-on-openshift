@@ -33,17 +33,17 @@ pipeline {
          *  launch a nodejs pod to run the steps section actions.
          */
 
-        stage('Dev - MochaJS Test') {
-            agent {
-                label 'nodejs'
-            }
-            steps {
-                dir('app') {
-                    sh 'npm install'
-                    sh 'npm test'
-                }
-            }
-        }
+        // stage('Dev - MochaJS Test') {
+        //     agent {
+        //         label 'nodejs'
+        //     }
+        //     steps {
+        //         dir('app') {
+        //             sh 'npm install'
+        //             sh 'npm test'
+        //         }
+        //     }
+        // }
 
         /** Dev - OpenShift Template
          *
