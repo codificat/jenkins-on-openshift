@@ -1,0 +1,2 @@
+HTTP_PROXY=http://proxy.example.com:3128
+HTTPS_PROXY=https://proxy.example.com:3128
