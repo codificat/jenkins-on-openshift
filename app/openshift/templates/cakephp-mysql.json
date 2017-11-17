@@ -50,14 +50,29 @@
       }
     },
     {
-      "kind": "ImageStream",
-      "apiVersion": "v1",
-      "metadata": {
-        "name": "cakephp-mysql-example",
-        "annotations": {
-          "description": "Keeps track of changes in the application image"
+        "kind": "ImageStream",
+        "apiVersion": "v1",
+        "metadata": {
+            "name": "${NAME}",
+            "annotations": {
+                "description": "Keeps track of changes in the application image"
+            }
+        },
+        "spec": {
+            "tags": [
+                {
+                    "from": {
+                        "kind": "DockerImage",
+                        "name": "${REGISTRY}/${REGISTRY_PROJECT}/${NAME}:${TAG}"
+                    },
+                    "name": "${IMAGESTREAM_TAG}",
+                    "importPolicy": {
+                        "insecure": true,
+                        "scheduled": true
+                    }
+                }
+            ]
         }
-      }
     },
     {
       "kind": "BuildConfig",
@@ -90,7 +105,7 @@
         "output": {
           "to": {
             "kind": "ImageStreamTag",
-            "name": "cakephp-mysql-example:latest"
+            "name": "${NAME}:${IMAGESTREAM_TAG}"
           }
         },
         "triggers": [
@@ -110,7 +125,7 @@
       "kind": "DeploymentConfig",
       "apiVersion": "v1",
       "metadata": {
-        "name": "cakephp-mysql-example",
+        "name": "${NAME}",
         "annotations": {
           "description": "Defines how to deploy the application server"
         }
@@ -140,7 +155,7 @@
               ],
               "from": {
                 "kind": "ImageStreamTag",
-                "name": "cakephp-mysql-example:latest"
+                "name": "${NAME}:${IMAGESTREAM_TAG}"
               }
             }
           },
@@ -373,6 +388,31 @@
       "name": "OPCACHE_REVALIDATE_FREQ",
       "description": "The How often to check script timestamps for updates, in seconds. 0 will result in OPcache checking for updates on every request.",
       "value": "2"
+    },
+    {
+        "name": "NAME",
+        "description": "Name to apply to generated objects",
+        "value": "cakephp-mysql-example"
+    },
+    {
+        "name": "IMAGESTREAM_TAG",
+        "description": "ImageStreamTag referencing the images that are built for the image",
+        "value": "latest"
+    },
+    {
+        "name": "TAG",
+        "description": "ImageStreamTag referencing the images that are built for the image",
+        "required": false
+    },
+    {
+      "name": "REGISTRY_PROJECT",
+      "description": "Unused",
+        "required": false
+    },
+    {
+      "name": "REGISTRY",
+      "description": "Unused",
+        "required": false
     }
   ]
 }
